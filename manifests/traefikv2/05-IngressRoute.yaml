@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteUDP
+metadata:
+  name: freeradius
+  namespace: radius
+spec:
+  entryPoints:
+    - radius
+  routes:
+  - match: HostSNI(`radius.example.intern`)
+    kind: Rule
+    services:
+      - name: freeradius
+        port: 1812
+  tls:
+    passthrough: true

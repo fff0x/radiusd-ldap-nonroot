@@ -1,0 +1,83 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freeradius
+  namespace: radius
+  labels:
+   app: freeradius
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: freeradius
+  template:
+    metadata:
+      labels:
+        app: freeradius
+    spec:
+      hostNetwork: true
+      securityContext:
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+      containers:
+      - name: freeradius
+        image: ff0x/radiusd-ldap-nonroot:amd64
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+        env:
+        - name: ACCESS_ALLOWED_CIDR
+          valueFrom:
+            configMapKeyRef:
+              name: config
+              key: access_allowed_cidr
+        - name: BASE_DOMAIN
+          valueFrom:
+            configMapKeyRef:
+              name: config
+              key: base_domain
+        - name: DOMAIN_EXTENSION
+          valueFrom:
+            configMapKeyRef:
+              name: config
+              key: domain_ext
+        - name: GOOGLE_LDAP_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: google-client-secret
+              key: google_ldap_username
+        - name: GOOGLE_LDAP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: google-client-secret
+              key: google_ldap_password
+        - name: SHARED_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: freeradius-shared-secret
+              key: shared_secret
+        ports:
+        - containerPort: 1812
+          protocol: UDP
+        volumeMounts:
+        - name: google-tls-client-secret
+          mountPath: "/etc/raddb/certs"
+          readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+      volumes:
+      - name: google-tls-client-secret
+        secret:
+          secretName: google-tls-client-secret
+          items:
+          - key: tls.crt
+            path: ldap-client.crt
+          - key: tls.key
+            path: ldap-client.key

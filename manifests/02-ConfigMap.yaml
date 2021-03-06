@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: radius
+  labels:
+   app: freeradius
+data:
+  access_allowed_cidr: "ACCESS_ALLOWED_CIDR"
+  base_domain: "BASE_DOMAIN"
+  domain_ext: "DOMAIN_EXTENSION"

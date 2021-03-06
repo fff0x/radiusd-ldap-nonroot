@@ -1,0 +1,39 @@
+#!/usr/bin/env sh
+# shellcheck shell=sh
+
+umask 077
+
+DAEMON_USR="${DAEMON_USR:-biscuit}"
+DAEMON_GRP="${DAEMON_GRP:-biscuit}"
+
+RADIUS_CONFDIR="/etc/raddb"
+
+# All credits goes to: https://github.com/hacor/unifi-freeradius-ldap
+
+[ -z "$BASE_DOMAIN" ]          && echo "BASE_DOMAIN env variable not defined! Exiting..."          && exit 1
+[ -z "$DOMAIN_EXTENSION" ]     && echo "DOMAIN_EXTENSION env variable not defined! Exiting..."     && exit 1
+[ -z "$GOOGLE_LDAP_PASSWORD" ] && echo "GOOGLE_LDAP_PASSWORD env variable not defined! Exiting..." && exit 1
+[ -z "$GOOGLE_LDAP_USERNAME" ] && echo "GOOGLE_LDAP_USERNAME env variable not defined! Exiting..." && exit 1
+[ -z "$ACCESS_ALLOWED_CIDR" ]  && echo "ACCESS_ALLOWED_CIDR env variable not defined! Exiting..."  && exit 1
+[ -z "$SHARED_SECRET" ]        && echo "SHARED_SECRET env variable not defined! Exiting..."        && exit 1
+
+sed -i "s|ACCESS_ALLOWED_CIDR|$ACCESS_ALLOWED_CIDR|g" "${RADIUS_CONFDIR}/clients.conf"
+sed -i "s|SHARED_SECRET|$SHARED_SECRET|g" "${RADIUS_CONFDIR}/clients.conf"
+sed -i "s|BASE_DOMAIN|$BASE_DOMAIN|g" "${RADIUS_CONFDIR}/clients.conf"
+sed -i "s|DOMAIN_EXTENSION|$DOMAIN_EXTENSION|g" "${RADIUS_CONFDIR}/clients.conf"
+
+sed -i "s|BASE_DOMAIN|$BASE_DOMAIN|g" "${RADIUS_CONFDIR}/proxy.conf"
+sed -i "s|DOMAIN_EXTENSION|$DOMAIN_EXTENSION|g" "${RADIUS_CONFDIR}/proxy.conf"
+
+sed -i "s|GOOGLE_LDAP_PASSWORD|$GOOGLE_LDAP_PASSWORD|g" "${RADIUS_CONFDIR}/mods-available/ldap"
+sed -i "s|GOOGLE_LDAP_USERNAME|$GOOGLE_LDAP_USERNAME|g" "${RADIUS_CONFDIR}/mods-available/ldap"
+
+# Add support to second level like: .com.br, .com.ar
+sed -i "s|BASE_DOMAIN|$BASE_DOMAIN|g" "${RADIUS_CONFDIR}/mods-available/ldap"
+# Little bit weird way of checking for '# of matching characters', since I try to be posix compliant
+if [ "$(expr "$DOMAIN_EXTENSION" : '[.]')" -eq 1 ]; then
+  DOMAIN_EXTENSION=$( echo "$DOMAIN_EXTENSION" | awk -F'.' '{print $1",dc="$2}' )
+fi
+sed -i "s|DOMAIN_EXTENSION|$DOMAIN_EXTENSION|g" "${RADIUS_CONFDIR}/mods-available/ldap"
+
+exec "$@"
