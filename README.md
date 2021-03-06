@@ -2,7 +2,7 @@
 
 This is an Alpine Linux based container image for Kubernetes, that provides [radiusd](https://github.com/FreeRADIUS/freeradius-server)
 prepared for the [Google Secure LDAP](https://support.google.com/a/answer/9048516?hl=en) backend (requires Google Workspace enterprise licence).
-For additional informations, please see [here](https://support.google.com/a/answer/9089736?hl=en#zippy=%2Cfreeradius).
+For further readings please see [here](https://support.google.com/a/answer/9089736?hl=en#zippy=%2Cfreeradius).
 
 ## Prerequisites
 
