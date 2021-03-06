@@ -1,8 +1,7 @@
 # radiusd-ldap 
 
-This is an Alpine based container image, that provides [radiusd](https://github.com/FreeRADIUS/freeradius-server)
-prepared for the [Google Secure LDAP](https://support.google.com/a/answer/9048516?hl=en) backend.
-Build to be run in an Kubernetes environment.
+This is an Alpine Linux based container image for Kubernetes, that provides [radiusd](https://github.com/FreeRADIUS/freeradius-server)
+prepared for the [Google Secure LDAP](https://support.google.com/a/answer/9048516?hl=en) backend (requires Google Workspace enterprise licence).
 For additional informations, please see [here](https://support.google.com/a/answer/9089736?hl=en#zippy=%2Cfreeradius).
 
 ## Prerequisites
@@ -55,9 +54,9 @@ kubectl create secret generic -n radius freeradius-shared-secret \
 ```
 
 **Note**:
-The Kubernetes manifests requires optionally Traefik v2 as ingress controller.
-See `manifests/traefikv2` and [this](https://github.com/k3s-io/k3s/issues/1141)
-for the status of Traefik v2 integration in k3s.
+The Kubernetes manifests optionally provides an IngressRoute configuration for the Traefik v2 ingress controller.
+See `manifests/traefikv2` and [this](https://github.com/k3s-io/k3s/issues/1141) for the current status of
+Traefik integration in k3s.
 
 ## Debug
 
