@@ -9,7 +9,7 @@ FROM alpine:3.12.1
 ##
 
 LABEL maintainer="Max Buelte <ff0x@tif.cat>"
-LABEL name="radiusd-ldap-nonroot" version="0.0.4"
+LABEL name="radiusd-ldap-nonroot" version="0.0.5"
 LABEL description="Alpine Linux based container image for Kubernetes running freeradius with ldap plugin prepared for Google Workspace Secure LDAP"
 
 ##
@@ -40,11 +40,11 @@ RUN apk upgrade --update --no-cache && \
 RUN apk add --update --no-cache rsync freeradius freeradius-ldap && \
     chown -R "${DAEMON_USR}":"${DAEMON_GRP}" /etc/raddb
 
-COPY scripts/init /init
-COPY --chown=${DAEMON_USR}:${DAEMON_GRP} scripts/default /etc/raddb/sites-available/default
-COPY --chown=${DAEMON_USR}:${DAEMON_GRP} scripts/ldap /etc/raddb/mods-available/ldap
-COPY --chown=${DAEMON_USR}:${DAEMON_GRP} scripts/clients.conf /etc/raddb/clients.conf
-COPY --chown=${DAEMON_USR}:${DAEMON_GRP} scripts/proxy.conf /etc/raddb/proxy.conf
+COPY ep /ep
+COPY --chown=${DAEMON_USR}:${DAEMON_GRP} conf/default /etc/raddb/sites-available/default
+COPY --chown=${DAEMON_USR}:${DAEMON_GRP} conf/ldap /etc/raddb/mods-available/ldap
+COPY --chown=${DAEMON_USR}:${DAEMON_GRP} conf/clients.conf /etc/raddb/clients.conf
+COPY --chown=${DAEMON_USR}:${DAEMON_GRP} conf/proxy.conf /etc/raddb/proxy.conf
 
 ##
 ## ENVIRONMENT
@@ -67,5 +67,5 @@ EXPOSE 1812/udp
 # -f  Run as a foreground process, not a daemon.
 # -X  Turn on full debugging (similar to -tfxxl stdout).
 
-ENTRYPOINT [ "/init" ]
+ENTRYPOINT [ "/ep" ]
 CMD ["radiusd", "-f"]
