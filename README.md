@@ -20,6 +20,9 @@ export GOOGLE_LDAP_TLS_CERT_FILE="/full/path/to/ldap-client.crt" # Google Secure
 export GOOGLE_LDAP_TLS_KEY_FILE="/full/path/to/ldap-client.key"  # certificate and key
 ```
 
+**Note**:
+The Makefile depends on the primary one found [here](https://github.com/fff0x/images/tree/master/%40include).
+
 ## Deployment
 
 Optional: Spin up a local Kubernetes cluster with `k3d` (k3s in docker):
