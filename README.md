@@ -25,20 +25,22 @@ export GOOGLE_LDAP_TLS_KEY_FILE="/full/path/to/ldap-client.key"  # certificate a
 ```
 ## Deployment
 
-Optional: Spin up a local Kubernetes cluster.
+Optional: Spin up a local Kubernetes cluster:
 
-Using `k3s`:
+Using `k3s`
 
 ```shell
 curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644 --secrets-encryption --no-deploy traefik
 ```
 
-or `k3d` (k3s in docker):
+or `k3d` (k3s in docker).
 
 ```shell
 k3d cluster create radius-test -p "1812:1812/udp@loadbalancer" --k3s-server-arg "--no-deploy=traefik"
 export KUBECONFIG=$(k3d kubeconfig write radius-test)
 ```
+
+Afterwards deploy the Kubernetes manifests:
 
 ```shell
 sed -i "s|ACCESS_ALLOWED_CIDR|$ACCESS_ALLOWED_CIDR|g" manifests/02-ConfigMap.yaml
