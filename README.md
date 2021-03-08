@@ -40,7 +40,7 @@ k3d cluster create radius-test -p "1812:1812/udp@loadbalancer" --k3s-server-arg 
 export KUBECONFIG=$(k3d kubeconfig write radius-test)
 ```
 
-Afterwards deploy the Kubernetes manifests:
+Set your variables and deploy the Kubernetes manifests:
 
 ```shell
 sed -i "s|ACCESS_ALLOWED_CIDR|$ACCESS_ALLOWED_CIDR|g" manifests/02-ConfigMap.yaml
@@ -50,7 +50,7 @@ sed -i "s|DOMAIN_EXTENSION|$DOMAIN_EXT|g" manifests/02-ConfigMap.yaml
 kubectl create -f manifests/
 ```
 
-Afterward set up some secrets:
+Afterwards create the required secrets:
 
 ```shell
 kubectl create secret tls -n radius google-tls-client-secret \
