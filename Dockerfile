@@ -9,7 +9,7 @@ FROM alpine:3.12.1
 ##
 
 LABEL maintainer="Max Buelte <ff0x@tif.cat>"
-LABEL name="radiusd-ldap-nonroot" version="0.0.5"
+LABEL name="radiusd-ldap-nonroot" version="0.0.6"
 LABEL description="Alpine Linux based container image for Kubernetes running freeradius with ldap plugin prepared for Google Workspace Secure LDAP"
 
 ##
