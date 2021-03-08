@@ -23,7 +23,9 @@ spec:
         fsGroup: 10000
       containers:
       - name: freeradius
-        image: ff0x/radiusd-ldap-nonroot:amd64
+        image: ff0x/radiusd-ldap-nonroot
+#       command: ["/ep"]
+#       args: ["radiusd", "-f", "-X"]
         imagePullPolicy: IfNotPresent
         securityContext:
           allowPrivilegeEscalation: false
