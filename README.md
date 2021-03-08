@@ -96,6 +96,7 @@ kubectl exec -n "radius" -ti $(shell kubectl get pod -n "radius" -lapp="freeradi
 Test connection to the freeradius server. This requires the `radtest` binary on your local machine,
 also ensure that you IP address match the provided CIDR in "$ACCESS_ALLOWED_CIDR".
 
+```shell
 radtest 'GOOGLE_USERNAME_OR_EMAIL_ADDRESS' 'GOOGLE_USER_PASSWORD' SERVER_IP 10 "$SHARED_SECRET"
 ```
 
