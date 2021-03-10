@@ -26,7 +26,7 @@ spec:
         image: ff0x/radiusd-ldap-nonroot
 #       command: ["/ep"]
 #       args: ["radiusd", "-f", "-X"]
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         securityContext:
           allowPrivilegeEscalation: false
         env:
